@@ -231,8 +231,8 @@ footer{padding:26px 0 40px;color:var(--ink-3);font-size:14px;display:flex;flex-w
     niches.length ? `<span><b>${niches.length}</b>${word(niches.length, 'ниша', 'ниши', 'ниш')}</span>` : ''
   ].join('');
   const kinds = new Set(cases.map((c) => c.kind || 'demo'));
-  if (kinds.size > 1) $('worksNote').textContent = [kinds.has('real') && '«Реальный заказ» – за сайт заплатил владелец', kinds.has('study') && '«Учебный кейс» – задача из обучения', kinds.has('demo') && '«Демо-проект» – сайт, собранный на пробу'].filter(Boolean).join('. ') + '.';
-  else $('worksNote').textContent = real && real < cases.length ? '«Реальный заказ» – сайт, за который заплатил владелец. «Демо-проект» – собранный на пробу, «Учебный кейс» – задача из обучения.' : real ? 'Все работы – реальные заказы.' : 'Демо-проекты: так выглядят сайты, которые я собираю для бизнесов.';
+  if (kinds.size > 1) $('worksNote').textContent = [kinds.has('real') && '«Реальный заказ» – за сайт заплатил владелец', kinds.has('study') && '«Учебный кейс» – задача из обучения', kinds.has('demo') && '«Готовый сайт» – рабочий сайт для бизнеса'].filter(Boolean).join('. ') + '.';
+  else $('worksNote').textContent = real && real < cases.length ? '«Реальный заказ» – сайт, за который заплатил владелец. «Демо-проект» – собранный на пробу, «Учебный кейс» – задача из обучения.' : real ? 'Все работы – реальные заказы.' : 'Живые сайты для бизнесов разных ниш: открывайте любой и смотрите, как он работает.';
 
   // мессенджеры: ссылка с готовым текстом; для MAX текст копируется в буфер
   const msg = D.message || 'Здравствуйте! Хочу заказать сайт.';
@@ -272,7 +272,7 @@ footer{padding:26px 0 40px;color:var(--ink-3);font-size:14px;display:flex;flex-w
         ${c.mobile ? phone(c, 18 + (i % 3) * 3) : ''}
       </div>
       <div class="case-text">
-        <div class="meta"><span class="badge ${c.kind === 'real' ? 'real' : c.kind === 'study' ? 'study' : 'demo'}">${c.kind === 'real' ? 'Реальный заказ' : c.kind === 'study' ? 'Учебный кейс' : 'Демо-проект'}</span>${esc([c.niche, c.city].filter(Boolean).join(' · '))}</div>
+        <div class="meta"><span class="badge ${c.kind === 'real' ? 'real' : c.kind === 'study' ? 'study' : 'demo'}">${c.kind === 'real' ? 'Реальный заказ' : c.kind === 'study' ? 'Учебный кейс' : 'Готовый сайт'}</span>${esc([c.niche, c.city].filter(Boolean).join(' · '))}</div>
         <h3>${esc(c.title)}</h3>
         ${story(c) ? `<ul class="story">${story(c)}</ul>` : c.about ? `<p style="color:var(--ink-2);margin:14px 0 0">${esc(c.about)}</p>` : ''}
         ${c.quote ? `<blockquote class="quote">«${esc(c.quote)}»<cite>${esc(c.quoteAuthor || 'владелец')}</cite></blockquote>` : ''}
