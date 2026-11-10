@@ -83,6 +83,8 @@ section.block{padding:72px 0;border-top:1px solid var(--line)}
 /* работы */
 .case{display:grid;gap:28px;align-items:center;padding:36px 0}
 .case + .case{border-top:1px dashed var(--line)}
+.case[hidden],.more-wrap[hidden]{display:none}
+.more-wrap{display:flex;justify-content:center;padding:28px 0 0;border-top:1px dashed var(--line)}
 @media (min-width:900px){.case{grid-template-columns:auto 1fr;gap:56px}.case:nth-child(even){grid-template-columns:1fr auto}.case:nth-child(even) .devices{order:2}}
 .devices{position:relative;display:flex;align-items:end;justify-content:center;gap:0;padding:10px 0}
 .browser{width:min(520px,72vw);border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 30px 50px -30px rgba(20,21,26,.4),0 0 0 1px var(--line)}
@@ -172,6 +174,7 @@ footer{padding:26px 0 40px;color:var(--ink-3);font-size:14px;display:flex;flex-w
   <section class="block" id="works">
     <div class="block-head reveal"><div><div class="eyebrow">Работы</div><h2>Сайты, которые я сделала</h2></div><p id="worksNote"></p></div>
     <div id="cases"></div>
+    <div class="more-wrap" id="moreWrap" hidden><button type="button" class="btn btn-ghost" id="moreBtn" aria-expanded="false"></button></div>
   </section>
 
   <section class="block" id="services">
@@ -264,9 +267,10 @@ footer{padding:26px 0 40px;color:var(--ink-3);font-size:14px;display:flex;flex-w
   if (withShots.length) fan.innerHTML = withShots.slice(0, 3).map((c, i) => phone(c, 20 + i * 4)).join('');
   else { fan.classList.add('empty'); fan.textContent = 'Здесь появятся ваши работы: скажите Клоду «добавь в витрину сайт …»'; }
 
+  const SHOW = 6;
   const story = (c) => [['Задача', c.task], ['Что сделал', c.did], ['Результат', c.result]].filter(([, v]) => v).map(([k, v]) => `<li><b>${k}</b><span>${esc(v)}</span></li>`).join('');
   $('cases').innerHTML = cases.map((c, i) => `
-    <article class="case reveal">
+    <article class="case reveal"${i >= SHOW ? ' hidden data-extra' : ''}>
       <div class="devices${c.desktop ? '' : ' solo'}">
         ${c.desktop ? `<div class="browser"><div class="bar"><i></i><i></i><i></i><span>${esc((c.url || '').replace(/^https?:\/\//, ''))}</span></div><img src="${esc(c.desktop)}" alt="Сайт ${esc(c.title)}" loading="lazy"></div>` : ''}
         ${c.mobile ? phone(c, 18 + (i % 3) * 3) : ''}
@@ -280,6 +284,18 @@ footer{padding:26px 0 40px;color:var(--ink-3);font-size:14px;display:flex;flex-w
       </div>
     </article>`).join('') || '<p style="color:var(--ink-3)">Работы появятся здесь.</p>';
 
+  const extra = document.querySelectorAll('#cases [data-extra]');
+  if (extra.length) {
+    const wrap = $('moreWrap'), btn = $('moreBtn');
+    const label = (open) => { btn.textContent = open ? 'Свернуть' : 'Показать все работы (' + cases.length + ')'; btn.setAttribute('aria-expanded', open); };
+    wrap.hidden = false; label(false);
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      extra.forEach((el) => { el.hidden = !open; });
+      label(open);
+      if (!open) $('works').scrollIntoView({ block: 'start' });
+    });
+  }
   $('price').innerHTML = (D.services || []).map((s) => `<li><h3>${esc(s.title)}</h3><p>${esc(s.desc || '')}</p><span class="sum">${esc(s.price || 'по запросу')}</span></li>`).join('');
   $('steps').innerHTML = (D.steps || [
     ['Демо до оплаты', 'Собираю демо вашего сайта по карточке на Картах или вашему описанию.'],
