@@ -84,6 +84,15 @@ section.block{padding:72px 0;border-top:1px solid var(--line)}
 .case{display:grid;gap:28px;align-items:center;padding:36px 0}
 .case + .case{border-top:1px dashed var(--line)}
 .case[hidden],.more-wrap[hidden]{display:none}
+.about{display:grid;gap:32px;align-items:start}
+@media (min-width:860px){.about{grid-template-columns:300px 1fr;gap:64px}}
+.about-photo{width:100%;max-width:300px;aspect-ratio:1;object-fit:cover;border-radius:28px;background:var(--soft)}
+.about h2{font-size:clamp(28px,3.6vw,44px);line-height:1.05;margin-top:10px}
+.about p{color:var(--ink-2);max-width:60ch;margin:16px 0 0}
+.about-facts{display:flex;flex-wrap:wrap;gap:12px 36px;margin:28px 0 0;padding:0;list-style:none}
+.about-facts li{display:flex;flex-direction:column;font-size:14px;color:var(--ink-3)}
+.about-facts b{font:600 26px/1.1 var(--display);color:var(--ink);margin-bottom:4px}
+.about .cta{margin-top:28px}
 .more-wrap{display:flex;justify-content:center;padding:28px 0 0;border-top:1px dashed var(--line)}
 @media (min-width:900px){.case{grid-template-columns:auto 1fr;gap:56px}.case:nth-child(even){grid-template-columns:1fr auto}.case:nth-child(even) .devices{order:2}}
 .devices{position:relative;display:flex;align-items:end;justify-content:center;gap:0;padding:10px 0}
@@ -175,6 +184,20 @@ footer{padding:26px 0 40px;color:var(--ink-3);font-size:14px;display:flex;flex-w
     <div class="block-head reveal"><div><div class="eyebrow">Работы</div><h2>Сайты, которые я сделала</h2></div><p id="worksNote"></p></div>
     <div id="cases"></div>
     <div class="more-wrap" id="moreWrap" hidden><button type="button" class="btn btn-ghost" id="moreBtn" aria-expanded="false"></button></div>
+  </section>
+
+  <section class="block" id="about">
+    <div class="about reveal">
+      <img class="about-photo" id="aboutPhoto" alt="Алла Ульянова" loading="lazy">
+      <div>
+        <div class="eyebrow">Обо мне</div>
+        <h2>Алла Ульянова, делаю сайты для малого бизнеса</h2>
+        <p>Собираю одностраничные сайты, многостраничные сайты и интернет-магазины для любых ниш: в работах их 16, от шиномонтажа и клининга до цветов и фитнеса. Реальный заказ – сайт шиномонтажа на Чуйкова: на него уже идут записи, владелица написала мне об этом сама.</p>
+        <p>Сначала делаю демо по вашей карточке на Картах, вы смотрите его до оплаты. Понравилось – переношу сайт на ваш домен или в вашу Тильду, добавляю форму связи и политику конфиденциальности. Работаю как самозанятая.</p>
+        <ul class="about-facts" id="aboutFacts"></ul>
+        <div class="cta" data-cta></div>
+      </div>
+    </div>
   </section>
 
   <section class="block" id="services">
@@ -284,6 +307,13 @@ footer{padding:26px 0 40px;color:var(--ink-3);font-size:14px;display:flex;flex-w
       </div>
     </article>`).join('') || '<p style="color:var(--ink-3)">Работы появятся здесь.</p>';
 
+  $('aboutPhoto').src = D.photo || ''; if (!D.photo) $('aboutPhoto').hidden = true;
+  $('aboutFacts').innerHTML = [
+    real ? `<li><b>${real}</b>реальный заказ с оплатой</li>` : '',
+    cases.length ? `<li><b>${cases.length}</b>${word(cases.length, 'сайт', 'сайта', 'сайтов')} в работах</li>` : '',
+    niches.length ? `<li><b>${niches.length}</b>${word(niches.length, 'ниша', 'ниши', 'ниш')}</li>` : '',
+    '<li><b>до 5 дней</b>на сайт-одностраничник</li>'
+  ].join('');
   const extra = document.querySelectorAll('#cases [data-extra]');
   if (extra.length) {
     const wrap = $('moreWrap'), btn = $('moreBtn');
